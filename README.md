@@ -17,3 +17,14 @@ export ADMIN=%your_steam_id%
 ```
 docker-compose up
 ```
+### Adding maps and other workshop content
+
+1. Add the workshop id to the dockerfile
+
+### Adding plugins
+
+1. Copy plugin to plugins directory and add plugin name to the qlx_plugin key in the docker-compose file.
+
+### Adding more servers
+
+1. Copy paste the "arena1" block in the docker-compose file and customise to taste
