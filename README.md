@@ -11,6 +11,7 @@ A quake live docker server with minqlx plugins
 3. Export your admin steam id
 ```
 export ADMIN=%your_steam_id%
+```
 
 4. Run it:
 ```
