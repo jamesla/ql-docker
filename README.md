@@ -1,30 +1,138 @@
 # ql-docker
 
-A quake live docker server with minqlx plugins
+A simple quake live docker server with minqlx plugins allowing you to stand a customised server up as a single command.
 
-### Getting started
+## Getting started
 
-1. Edit config files in config directory.
+### Prequisites
 
-2. Edit docker-compose file to add or remove arenas configuration or plugins unique to each.
+Ensure the following are installed:
 
-3. Export your admin steam id
+1. Docker
+2. Docker-compose
+
+### Simple example (customised vanilla quakelive)
+
+1. Create and customise the following docker compose file:
+
+```yaml
+---
+version: "3.8"
+
+services:
+  arena1:
+    image: jamesla/quakelive:latest
+    stdin_open: true
+    tty: true
+    ports:
+    - "27960:27960/udp"
+    environment:
+      ACCESS: |
+        XXXXXXXXXXXXXXXXX|admin
+      SERVER_CFG: |
+        ######################################
+        # this will create a simple server
+        # put your own config here
+        #######################################
+        set sv_hostname "my quake server"
+        set serverstartup "startrandommap"
+      MAP_POOL: |
+        overkill|ffa
 ```
-export ADMIN=%your_steam_id%
-```
 
-4. Run it:
-```
+2. Run it
+
+```bash
 docker-compose up
 ```
-### Adding maps and other workshop content
 
-1. Add the workshop id to the dockerfile
+### Advanced example (custom workshops content)
 
-### Adding plugins
+To include custom workshops and/or factories you will need to extend this docker image.
 
-1. Copy plugin to plugins directory and add plugin name to the qlx_plugin key in the docker-compose file.
+1. Create your own dockerfile using this one as a base image:
 
-### Adding more servers
+```Dockerfile
+FROM cm2network/steamcmd as workshop-grabber
 
-1. Copy paste the "arena1" block in the docker-compose file and customise to taste
+RUN ./steamcmd.sh \
+  +login anonymous \
+  +workshop_download_item 282440 553088484 \ 
+  +workshop_download_item 282440 557591894 \ 
+  +quit
+
+
+FROM jamesla/quakelive:latest
+
+#COPY WORKSHOP CONTENT
+COPY --from=workshop-grabber /home/steam/Steam/steamapps /qlds
+```
+
+2. Update `WORKSHOP_IDS` in docker-compose file
+
+```yaml
+---
+version: "3.8"
+
+services:
+  arena1:
+    build: ./%PATH_TO_YOUR_DOCKERFILE%
+    ...
+    environment:
+      ...
+      WORKSHOP_IDS: |
+        553088484 
+        557591894
+```
+
+3. Build it
+
+```bash
+docker-compose build
+```
+
+4. Run it
+
+```bash
+docker-compose up
+```
+
+### Advanced example (custom factory)
+
+To include custom workshops and/or factories you will need to extend this docker image.
+
+1. Create your own dockerfile using this one as a base image:
+
+```Dockerfile
+FROM jamesla/quakelive:latest
+
+#COPY FACTORIES
+ADD my_custom_factory.factories baseq3/scripts/my_custom_factory.factories
+```
+
+2. Update `MAP_POOL` and image in docker-compose file
+
+```yaml
+---
+version: "3.8"
+
+services:
+  arena1:
+    build: ./%PATH_TO_YOUR_DOCKERFILE%
+    ...
+    environment:
+      ...
+      MAP_POOL: |
+        overkill|%YOUR_CUSTOM_FACTORY_NAME%
+```
+3. Build it
+
+```bash
+docker-compose build
+```
+
+4. Run it
+
+```bash
+docker-compose up
+```

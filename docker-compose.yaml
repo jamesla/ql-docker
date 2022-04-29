@@ -3,24 +3,22 @@ version: "3.8"
 
 services:
   arena1:
-    build: ./
+    image: jamesla/quakelive:latest
+    stdin_open: true
+    tty: true
     ports:
     - "27960:27960/udp"
-    - "28960:28960"
-    links:
-    - redis
-    volumes:
-    - ./configs/turboca.factories:/home/quake/ql/baseq3/scripts/turboca.factories:ro
-    - ./configs/server.cfg:/home/quake/ql/baseq3/server.cfg:ro
-    - ./configs/mappool_turboca.txt:/home/quake/ql/baseq3/mappool_turboca:ro
-    - ./configs/access.txt:/home/quake/ql/baseq3/access.txt:ro
-    entrypoint: [
-      "./ql/run_server_x64_minqlx.sh",
-        "+set","net_strict", "1",
-        "+set", "net_port", "27960",
-        "+set", "sv_tags", "multi-arena",
-        "+set", "qlx_owner", "${ADMIN}",
-        "+set", "qlx_plugins", "essentials,permission,motd"
-    ]
-  redis:
-    image: redis
+    environment:
+      ACCESS: |
+        XXXXXXXXXXXXXXXXX|admin
+      SERVER_CFG: |
+        ######################################
+        # this will create a simple server
+        # put your own config here
+        #######################################
+        set sv_hostname "my quake server"
+        #set sv_servertype "1"
+        set serverstartup "startrandommap"
+      MAP_POOL: |
+        overkill|ffa
+
