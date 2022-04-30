@@ -134,3 +134,57 @@ docker-compose build
 ```bash
 docker-compose up
 ```
+
+### Advanced example (multiple servers)
+
+1. Update your docker-compose to include multiple servers:
+
+```yaml
+---
+version: "3.8"
+
+services:
+  arena1:
+    image: jamesla/quakelive:latest
+    stdin_open: true
+    tty: true
+    ports:
+    - "27960:27960/udp"
+    environment:
+      ACCESS: |
+        XXXXXXXXXXXXXXXXX|admin
+      SERVER_CFG: |
+        ######################################
+        # this will create a simple server
+        # put your own config here
+        #######################################
+        set sv_hostname "my ffa quake server"
+        set serverstartup "startrandommap"
+      MAP_POOL: |
+        overkill|ffa
+  ctf:
+    image: jamesla/quakelive:latest
+    stdin_open: true
+    tty: true
+    ports:
+    - "27960:27960/udp"
+    environment:
+      ACCESS: |
+        XXXXXXXXXXXXXXXXX|admin
+      SERVER_CFG: |
+        ######################################
+        # this will create a simple server
+        # put your own config here
+        #######################################
+        set sv_hostname "my ctf quake server"
+        set serverstartup "startrandommap"
+      MAP_POOL: |
+        campercrossings|ctf
+``o
+
+2. Run it
+
+```bash
+docker-compose up
+```
+
