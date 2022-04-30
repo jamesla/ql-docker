@@ -1,0 +1,32 @@
+---
+version: "3.8"
+
+services:
+  arena1:
+    image: jamesla/quakelive:latest
+    stdin_open: true
+    tty: true
+    ports:
+    - "27960:27960/udp"
+    environment:
+      ACCESS: |
+        XXXXXXXXXXXXXXXXX|admin
+      SERVER_CFG: |
+        set sv_hostname "my ffa quake server"
+        set serverstartup "startrandommap"
+      MAP_POOL: |
+        overkill|ffa
+  arena2:
+    image: jamesla/quakelive:latest
+    stdin_open: true
+    tty: true
+    ports:
+    - "27970:27960/udp"
+    environment:
+      ACCESS: |
+        XXXXXXXXXXXXXXXXX|admin
+      SERVER_CFG: |
+        set sv_hostname "my ctf quake server"
+        set serverstartup "startrandommap"
+      MAP_POOL: |
+        campercrossings|ctf

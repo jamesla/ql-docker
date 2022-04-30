@@ -1,0 +1,26 @@
+---
+version: "3.8"
+
+services:
+  arena1:
+    image: jamesla/quakelive:latest
+    stdin_open: true
+    tty: true
+    ports:
+    - "27960:27960/udp"
+    environment:
+      ACCESS: |
+        MY_STEAM_ID|admin
+      SERVER_CFG: |
+        ######################################
+        # this will create a simple server
+        # put your own config here
+        #######################################
+        set sv_hostname "my quake server"
+        set serverstartup "startrandommap"
+      MAP_POOL: |
+        overkill|ffa
+      WORKSHOP_IDS: |
+        553088484 
+        557591894
+
