@@ -43,8 +43,8 @@ docker-compose up
 
 For examples on how to make common customisations to your server see the following examples:
 
-* [Running multiple quake servers](https://github.com/jamesla/ql-docker/examples/simple/multiple-servers/README.md)
-* [Adding custom steam workshop content (maps etc)](https://github.com/jamesla/ql-docker/examples/simple/workshop-content/README.md)
-* [Adding custom factories (game modes)](https://github.com/jamesla/ql-docker/examples/advanced/custom-factory/README.md)
-* [Adding custom minql plugins](https://github.com/jamesla/ql-docker/examples/advanced/custom-minql-plugin/README.md)
+* [Running multiple quake servers](https://github.com/jamesla/ql-docker/tree/master/examples/simple/multiple-servers)
+* [Adding custom steam workshop content (maps etc)](https://github.com/jamesla/ql-docker/tree/master/examples/simple/workshop-content)
+* [Adding custom factories (game modes)](https://github.com/jamesla/ql-docker/tree/master/examples/advanced/custom-factory)
+* [Adding custom minql plugins](https://github.com/jamesla/ql-docker/tree/master/examples/advanced/custom-minql-plugin)
 
