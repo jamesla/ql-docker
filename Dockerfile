@@ -12,7 +12,6 @@ RUN ./steamcmd.sh \
 FROM ubuntu:20.04 as minqlx-builder
 
 RUN apt-get update && apt-get install -y --reinstall \
-  #git \
   build-essential \
   python3 \
   python3-dev \
@@ -54,5 +53,8 @@ WORKDIR /qlds
 ADD entrypoint.sh entrypoint.sh
 ENTRYPOINT ["./entrypoint.sh"]
 
-CMD ./run_server_x86_minqlx.sh
+CMD ./run_server_x86_minqlx.sh\
+  +set sv_mappoolfile "mappool.txt" \
+  +set g_accessfile "access.txt" \
+  +set logfile "0"
 
