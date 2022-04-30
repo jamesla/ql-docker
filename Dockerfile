@@ -14,8 +14,7 @@ FROM ubuntu:20.04 as minqlx-builder
 RUN apt-get update && apt-get install -y --reinstall \
   build-essential \
   python3 \
-  python3-dev \
-  python3-pip
+  python3-dev
 
 ARG MINQL_VERSION=v0.5.3
 ARG MINQL_PLUGINS_VERSION=v0.3.7
@@ -30,31 +29,34 @@ RUN mkdir /minqlx \
 # get minqlx plugins
 ADD https://github.com/MinoMino/minqlx-plugins/archive/refs/tags/$MINQL_PLUGINS_VERSION.tar.gz .
 RUN mkdir /minqlx-plugins \
-  && tar -xvf $MINQL_PLUGINS_VERSION.tar.gz -C /minqlx-plugins --strip-components 1 \
-  && pip3 install -r /minqlx-plugins/requirements.txt
+  && tar -xvf $MINQL_PLUGINS_VERSION.tar.gz -C /minqlx-plugins --strip-components 1
 
 
 FROM ubuntu:20.04
 
-RUN dpkg --add-architecture i386
 RUN apt-get update && apt-get install -y --reinstall \
-  zlib1g:i386 \
+  zlib1g \
   lib32stdc++6 \
   ca-certificates \
   python3 \
-  python3-dev
+  python3-dev \
+  python3-pip
 
 COPY --from=qlds-builder /home/steam/steamcmd/qlds /qlds
 COPY --from=minqlx-builder /minqlx/bin/* /qlds/
 COPY --from=minqlx-builder /minqlx-plugins/ /qlds/minqlx-plugins
+
+RUN cd /qlds/minqlx-plugins && pip3 install -r requirements.txt
 
 WORKDIR /qlds
 
 ADD entrypoint.sh entrypoint.sh
 ENTRYPOINT ["./entrypoint.sh"]
 
-CMD ./run_server_x86_minqlx.sh\
+CMD ./run_server_x64_minqlx.sh\
+  +set serverstartup "startrandommap" \
   +set sv_mappoolfile "mappool.txt" \
   +set g_accessfile "access.txt" \
+  +set qlx_plugins "workshop" \
   +set logfile "0"
 
