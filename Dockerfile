@@ -57,6 +57,5 @@ CMD ./run_server_x64_minqlx.sh\
   +set serverstartup "startrandommap" \
   +set sv_mappoolfile "mappool.txt" \
   +set g_accessfile "access.txt" \
-  +set qlx_plugins "workshop" \
   +set logfile "0"
 
