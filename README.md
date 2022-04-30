@@ -48,26 +48,9 @@ docker-compose up
 
 ### Advanced example (custom workshops content)
 
-To include custom workshops and/or factories you will need to extend this docker image.
+To include custom workshops content factories you will need to add the workshop content id's to the docker-compose file:
 
-1. Create your own dockerfile that extends this one:
-
-```Dockerfile
-FROM cm2network/steamcmd as workshop-grabber
-
-RUN ./steamcmd.sh \
-  +login anonymous \
-  +workshop_download_item 282440 553088484 \ 
-  +workshop_download_item 282440 557591894 \ 
-  +quit
-
-
-FROM jamesla/quakelive:latest
-
-COPY --from=workshop-grabber /home/steam/Steam/steamapps /qlds
-```
-
-2. Update `WORKSHOP_IDS` in docker-compose file
+1. Update `WORKSHOP_IDS` in docker-compose file
 
 ```yaml
 ---
@@ -75,7 +58,6 @@ version: "3.8"
 
 services:
   arena1:
-    build: ./%PATH_TO_YOUR_DOCKERFILE%
     ...
     environment:
       ...
@@ -84,13 +66,7 @@ services:
         557591894
 ```
 
-3. Build it
-
-```bash
-docker-compose build
-```
-
-4. Run it
+3. Run it
 
 ```bash
 docker-compose up
@@ -100,6 +76,7 @@ docker-compose up
 
 To include custom workshops and/or factories you will need to extend this docker image.
 
+
 1. Create your own dockerfile using this one as a base image:
 
 ```Dockerfile
@@ -108,7 +85,7 @@ FROM jamesla/quakelive:latest
 ADD my_custom_factory.factories baseq3/scripts/my_custom_factory.factories
 ```
 
-2. Update `MAP_POOL` and image in docker-compose file
+2. Update `MAP_POOL` to use your factory in your docker-compose file:
 
 ```yaml
 ---
@@ -183,6 +160,48 @@ services:
 ```
 
 2. Run it
+
+```bash
+docker-compose up
+```
+
+### Advanced example (custom minql plugin)
+
+To include a custom minql plugin you will need to extend this docker image.
+
+
+1. Create your own dockerfile using this one as a base image:
+
+```Dockerfile
+FROM jamesla/quakelive:latest
+
+ADD my_minqlx_plugin.py minqlx-plugins/my_minqlx_plugin.py
+```
+
+2. Update `SERVER_CFG` environment variable in your docker compose file:
+
+```yaml
+---
+version: "3.8"
+
+services:
+  arena1:
+    build: ./%PATH_TO_YOUR_DOCKERFILE%
+    ...
+    environment:
+      ...
+      SERVER_CFG: |
+        ...
+        set qlx_plugins "my_minqlx_plugin"
+        ...
+```
+3. Build it
+
+```bash
+docker-compose build
+```
+
+4. Run it
 
 ```bash
 docker-compose up
