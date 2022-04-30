@@ -180,7 +180,7 @@ services:
         set serverstartup "startrandommap"
       MAP_POOL: |
         campercrossings|ctf
-``o
+```
 
 2. Run it
 
