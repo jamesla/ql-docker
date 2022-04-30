@@ -1,6 +1,6 @@
-# ql-docker
+# Simple Quake Live Server
 
-A simple quake live docker server with minqlx plugins allowing you to stand a customised server up as a single command.
+A simple and customisable quake live docker server with minqlx plugins allowing you to stand a customised server up as a single command.
 
 ## Getting started
 
@@ -50,7 +50,7 @@ docker-compose up
 
 To include custom workshops and/or factories you will need to extend this docker image.
 
-1. Create your own dockerfile using this one as a base image:
+1. Create your own dockerfile that extends this one:
 
 ```Dockerfile
 FROM cm2network/steamcmd as workshop-grabber
@@ -64,7 +64,6 @@ RUN ./steamcmd.sh \
 
 FROM jamesla/quakelive:latest
 
-#COPY WORKSHOP CONTENT
 COPY --from=workshop-grabber /home/steam/Steam/steamapps /qlds
 ```
 
@@ -106,7 +105,6 @@ To include custom workshops and/or factories you will need to extend this docker
 ```Dockerfile
 FROM jamesla/quakelive:latest
 
-#COPY FACTORIES
 ADD my_custom_factory.factories baseq3/scripts/my_custom_factory.factories
 ```
 
