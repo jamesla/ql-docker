@@ -1,0 +1,19 @@
+---
+version: "3.8"
+
+services:
+  arena1:
+    build: ./ #use the local dockerfile rather than jamesla/quakelive from dockerhub
+    stdin_open: true
+    tty: true
+    ports:
+    - "27960:27960/udp"
+    environment:
+      ACCESS: |
+        MY_STEAM_ID|admin
+      SERVER_CFG: |
+        set sv_hostname "my quake server"
+        set serverstartup "startrandommap"
+      MAP_POOL: |
+        overkill|pql #add the custom gametype from your factory here
+
